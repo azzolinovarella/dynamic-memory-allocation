@@ -85,7 +85,7 @@ int main(){
 			printf("\n");
 			}
 		
-		if(validator == 1){
+		if(validator == 1){  // Ta Errado...
 			printf("Insira o ID: ");
 			scanf("%i", &id);
 			printf("Insira a senha da conta: ");
