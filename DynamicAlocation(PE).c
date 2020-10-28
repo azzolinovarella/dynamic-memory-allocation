@@ -16,10 +16,10 @@ int get_option(){
 	
 	while(validator == 0){
 		printf("Choose your option: ");
-		printf("\n0 - Add new user;\n1 - Check user data;\n2 - Edit user data;\n3 - Delete user data;\n4 - Finish program.\nOpt: ");
+		printf("\n 0 - Add new user;\n 1 - Check user data;\n 2 - Edit user data;\n 3 - Delete user data;\n 4 - Check all id and users in the system;\n-1 - Finish program.\nOpt: ");
 		scanf("%i", &opt);
-		if(opt != 0 && opt != 1 && opt != 2 && opt != 3 && opt != 4){
-			printf("Invalid option!\n");
+		if(opt != 0 && opt != 1 && opt != 2 && opt != 3 && opt != 4 && opt != -1){
+			printf("Invalid option!\n\n");
 		}
 		else{
 			break;
@@ -91,7 +91,7 @@ int check_user(PeopleData *first_account, int id){
 	while(aux_account != NULL){
 		if(aux_account->id == id){
 			printf("----------------------------------------------------------\n");
-			printf("User id: %i\nUser full name: %s\nUser email: %s\nUser balance: $%.2f\n", aux_account->id, aux_account->full_name, aux_account->email, aux_account->balance);
+			printf("User id: %010i\nUser full name: %s\nUser email: %s\nUser balance: $%.2f\n", aux_account->id, aux_account->full_name, aux_account->email, aux_account->balance);
 			printf("----------------------------------------------------------\n\n");
 			return 0;
 		}
@@ -101,14 +101,80 @@ int check_user(PeopleData *first_account, int id){
 	return 0;
 }
 	
+
+int edit_user(PeopleData *first_account, int id){
+	PeopleData *aux_account;
 	
+	aux_account = first_account;
+	while(aux_account->id != id){
+		aux_account = aux_account->next;
+	}
+	printf("New id (old is '%010i'): ", aux_account->id);
+	scanf("%i", &(aux_account->id));
+	printf("New user full name (old is '%s'): ", aux_account->full_name);
+	scanf(" %[^\t\n]s", &(aux_account->full_name));	
+	printf("New user email (old is '%s'): ", aux_account->email);
+	scanf(" %[^\t\n]s", &(aux_account->email));
+	printf("New user balance (old is '$%.2f'): ", aux_account->balance);
+	scanf("%f", &(aux_account->balance));
+	printf("User data changed successfully!\n\n");
+	
+	return 0;
+}
+
+
+int del_user(PeopleData *first_account, int id){
+	PeopleData *aux_account, *temp_account;
+	int ans;
+	
+	aux_account = first_account;
+	printf("Are you sure you wanna delete this user from the system? (1 = Yes/0 = No) ");
+	scanf("%i", &ans);
+	while(ans != 1 && ans != 0){
+		printf("Invalid option!\n");
+		printf("Are you sure you wanna delete this user from the system? (1 = Yes/0 = No) ");
+		scanf("%i", &ans);
+	}
+	
+	if(ans == 0){
+		printf("Operation cancelled...\n\n");
+		return 0;
+	}
+	aux_account = first_account;
+	while(aux_account->id != id){
+		if((aux_account->next)->id == id){
+			temp_account = aux_account;  // Getting the last item before the one that will be deleted
+		}
+		aux_account = aux_account->next;
+	}
+	temp_account->next = aux_account->next;
+	free(aux_account);
+	
+	printf("User successfully deleted!\n\n");
+	return 0;
+}
+
+
+int print_all_users(PeopleData *first_account){
+	PeopleData *aux_account;
+	
+	printf("----------------------------------------------------------\n");
+	aux_account = first_account;
+	while(aux_account != NULL){
+		printf("# %010i (%s)\n", aux_account->id, aux_account->full_name);
+		aux_account = aux_account->next;
+	}
+	printf("----------------------------------------------------------\n\n");
+	
+	return 0;
+}	
 
 int main(){
 	int opt, id, num_users = 0, validator = 0;
 	PeopleData *first_account, *new_account, *aux_account; 
 	
 	while(validator == 0){
-		opt = get_option();  // 0 - Add new user;	1 - Check user data;	2 - Edit user data;		3 - Delete user data;		4 - Finish program.
+		opt = get_option();  // 0 - Add new user;	1 - Check user data;	2 - Edit user data;		3 - Delete user data;	4 - Check all id and users in the system;		-1 - Finish program.
 		
 		if(opt == 0){
 			if(num_users == 0){
@@ -153,16 +219,50 @@ int main(){
 		
 		
 		else if(opt == 2){
-			// Falta add
+			if(num_users > 0){
+				printf("Type the user id: ");
+				scanf("%i", &id);
+				if(exist_user(first_account, id) == 1){
+					edit_user(first_account, id);					
+				}
+				else{
+					printf("There is no user with this id!\n\n");
+				}
+			}
+			else{
+				printf("There is no user in our system.\n\n");
+			}
 		}
 		
 		
 		else if(opt == 3){
-			// Falta add
+			if(num_users > 0){
+				printf("Type the user id: ");
+				scanf("%i", &id);
+				if(exist_user(first_account, id) == 1){
+					del_user(first_account, id);
+					num_users --;
+				}
+				else{
+					printf("There is no user with this id!\n\n");
+				}
+			}
+			else{
+				printf("There is no user in our system.\n\n");
+			}
+		}
+		
+		else if(opt == 4){
+			if(num_users > 0){
+				print_all_users(first_account);
+			}
+			else{
+				printf("There is no user in our system.\n\n");
+			}
 		}
 		
 		
-		else if(opt == 4){
+		else if(opt == -1){
 			break;
 		}
 	
