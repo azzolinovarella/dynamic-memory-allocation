@@ -3,7 +3,7 @@
 
 struct stPeopleData{
 	int id;
-	char first_name[60];
+	char full_name[60];
 	char email[60];
 	float balance;
 	struct stPeopleData *next;
@@ -35,10 +35,10 @@ PeopleData first_user(int id){
 	first_account = (PeopleData *)malloc(sizeof(PeopleData));
 	
 	first_account->id = id;
-	printf("New user first name: ");
-	scanf("%s", first_account->first_name);	
+	printf("New user full name: ");
+	scanf(" %[^\t\n]s", &(first_account->full_name));	
 	printf("New user email: ");
-	scanf("%s", first_account->email);
+	scanf(" %[^\t\n]s", &(first_account->email));
 	printf("New user balance: ");
 	scanf("%f", &(first_account->balance));
 	
@@ -55,15 +55,15 @@ PeopleData create_user(PeopleData *first_account, int id){
 	new_account = (PeopleData *)malloc(sizeof(PeopleData));
 	
 	new_account->id = id;
-	printf("New user first name: ");
-	scanf("%s", new_account->first_name);
+	printf("New user full name: ");
+	scanf(" %[^\t\n]s", &(new_account->full_name));
 	printf("New user email: ");
-	scanf("%s", new_account->email);
+	scanf(" %[^\t\n]s", &(new_account->email));
 	printf("New user balance: ");
 	scanf("%f", &(new_account->balance));	
 	
 	new_account->next = NULL;
-	
+		
 	printf("\n");
 	return *new_account; 	
 }
@@ -90,7 +90,7 @@ int check_user(PeopleData *first_account, int id){
 	while(aux_account != NULL){
 		if(aux_account->id == id){
 			printf("----------------------------------------------------------\n");
-			printf("User id: %i\nUser first name: %s\nUser email: %s\nUser balance: $%.2f\n", aux_account->id, aux_account->first_name, aux_account->email, aux_account->balance);
+			printf("User id: %i\nUser full name: %s\nUser email: %s\nUser balance: $%.2f\n", aux_account->id, aux_account->full_name, aux_account->email, aux_account->balance);
 			printf("----------------------------------------------------------\n\n");
 			return 0;
 		}
