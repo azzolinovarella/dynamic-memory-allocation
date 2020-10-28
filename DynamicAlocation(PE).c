@@ -12,8 +12,9 @@ struct stPeopleData{
 
 int get_option(){
 	int opt;
+	int validator = 0;
 	
-	while(true){
+	while(validator == 0){
 		printf("Choose your option: ");
 		printf("\n0 - Add new user;\n1 - Check user data;\n2 - Edit user data;\n3 - Delete user data;\n4 - Finish program.\nOpt: ");
 		scanf("%i", &opt);
@@ -69,17 +70,17 @@ PeopleData create_user(PeopleData *first_account, int id){
 }
 
 
-bool exist_user(PeopleData *first_account, int id){
+int exist_user(PeopleData *first_account, int id){
 	PeopleData *aux_account;
 	
 	aux_account = first_account;
 	while(aux_account != NULL){
 		if(aux_account->id == id){
-			return true;  // true = Exists
+			return 1;  // 1 = Exists
 		}
 		aux_account = aux_account->next;
 	}
-	return false; // false = Do not exist
+	return 0; // 0 = Do not exist
 }
 
 
@@ -103,11 +104,10 @@ int check_user(PeopleData *first_account, int id){
 	
 
 int main(){
-	int opt, id, num_users = 0;
-	bool flag;
+	int opt, id, num_users = 0, validator = 0;
 	PeopleData *first_account, *new_account, *aux_account; 
 	
-	while(true){
+	while(validator == 0){
 		opt = get_option();  // 0 - Add new user;	1 - Check user data;	2 - Edit user data;		3 - Delete user data;		4 - Finish program.
 		
 		if(opt == 0){
@@ -124,11 +124,11 @@ int main(){
 				printf("New user id: ");
 				scanf("%i", &id);
 				
-				if(exist_user(first_account, id) == true){
+				if(exist_user(first_account, id) == 1){
 					printf("This user already exists!\n\n");					
 				}
 				
-				else if(exist_user(first_account, id) == false){
+				else if(exist_user(first_account, id) == 0){
 					new_account->next = (PeopleData*)malloc(sizeof(PeopleData));
 					new_account = new_account->next;
 					
